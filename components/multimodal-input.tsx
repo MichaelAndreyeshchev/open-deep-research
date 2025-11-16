@@ -361,7 +361,7 @@ function PureStopButton({
   return (
     <Button
       className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-      onClick={(event) => {
+      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         stop();
         setMessages((messages) => sanitizeUIMessages(messages));
@@ -386,7 +386,7 @@ function PureSendButton({
   return (
     <Button
       className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-      onClick={(event) => {
+      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         submitForm();
       }}
