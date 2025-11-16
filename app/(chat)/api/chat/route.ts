@@ -13,6 +13,7 @@ import { models, reasoningModels } from '@/lib/ai/models';
 import { rateLimiter } from '@/lib/rate-limit';
 import {
   systemPrompt,
+  peCddSystemPrompt,
 } from '@/lib/ai/prompts';
 import {
   deleteChatById,
@@ -29,6 +30,7 @@ import {
 
 import { generateTitleFromUserMessage } from '../../actions';
 import FirecrawlApp from '@mendable/firecrawl-js';
+import { streamDeepResearch } from '@/lib/ai/openai-deep-research';
 
 type AllowedTools =
   | 'deepResearch'
