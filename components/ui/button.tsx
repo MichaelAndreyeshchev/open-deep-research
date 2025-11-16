@@ -6,10 +6,11 @@ export interface ButtonProps extends Omit<MantineButtonProps, 'variant' | 'size'
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   asChild?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', asChild = false, ...props }, ref) => {
+  ({ className, variant = 'default', size = 'default', asChild = false, type, ...props }, ref) => {
     const mantineVariant = 
       variant === 'default' ? 'filled' :
       variant === 'destructive' ? 'filled' :
@@ -35,6 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         size={mantineSize}
         color={mantineColor}
         className={cn(className)}
+        type={type}
         {...props}
       />
     );
