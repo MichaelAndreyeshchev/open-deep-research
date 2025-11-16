@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Analytics } from '@vercel/analytics/react';
 import { DeepResearchProvider } from '@/lib/deep-research-context';
 
 import './globals.css';
+import '@mantine/core/styles.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://extract.chat'),
@@ -53,6 +55,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <ColorSchemeScript />
         <script
           dangerouslySetInnerHTML={{
             __html: THEME_COLOR_SCRIPT,
@@ -60,17 +63,19 @@ export default async function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <DeepResearchProvider>
-            <Toaster position="top-center" />
-            {children}
-          </DeepResearchProvider>
-        </ThemeProvider>
+        <MantineProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <DeepResearchProvider>
+              <Toaster position="top-center" />
+              {children}
+            </DeepResearchProvider>
+          </ThemeProvider>
+        </MantineProvider>
         <Analytics />
       </body>
     </html>
