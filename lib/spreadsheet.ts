@@ -49,6 +49,6 @@ export function exportToCSV(
 
     return;
   } catch (error) {
-    throw new Error('Failed to export CSV: ' + (error as Error).message);
+    throw new Error(`Failed to export CSV: ${(error as Error).message}`);
   }
 }

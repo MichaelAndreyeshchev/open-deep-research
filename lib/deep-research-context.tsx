@@ -4,7 +4,7 @@ import {
   createContext,
   useContext,
   useReducer,
-  ReactNode,
+  type ReactNode,
   useCallback,
 } from 'react';
 

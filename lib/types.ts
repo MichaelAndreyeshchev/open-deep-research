@@ -1,4 +1,4 @@
-import { ChatRequestOptions as BaseChatRequestOptions } from 'ai';
+import type { ChatRequestOptions as BaseChatRequestOptions } from 'ai';
 
 export interface ChatRequestOptions extends BaseChatRequestOptions {
   experimental_deepResearch?: boolean;

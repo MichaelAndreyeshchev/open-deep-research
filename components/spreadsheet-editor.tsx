@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
   useRef,
-  KeyboardEvent,
+  type KeyboardEvent,
   useCallback,
   memo,
 } from 'react';
@@ -381,7 +381,7 @@ const PureSpreadsheetEditor = ({
         <table className="min-w-full border-collapse">
           <thead>
             <tr>
-              <th className="w-10 bg-muted border p-2"></th>
+              <th className="w-10 bg-muted border p-2" />
               {data.headers.map((header, i) => (
                 <th key={i} className="border p-2 bg-muted min-w-[100px]">
                   {header}
@@ -412,13 +412,12 @@ const PureSpreadsheetEditor = ({
     <div
       className="w-full overflow-x-auto"
       ref={editorRef}
-      tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       <table className="min-w-full border-collapse relative">
         <thead>
           <tr>
-            <th className="w-10 bg-muted border p-2"></th>
+            <th className="w-10 bg-muted border p-2" />
             {data.headers.map((header, i) => (
               <th
                 key={i}
@@ -670,9 +669,9 @@ const PureSpreadsheetEditor = ({
               </button>
             </td>
             {data.headers.map((_, i) => (
-              <td key={i} className="border p-2 bg-muted"></td>
+              <td key={i} className="border p-2 bg-muted" />
             ))}
-            <td className="w-10 border p-2 bg-muted"></td>
+            <td className="w-10 border p-2 bg-muted" />
           </tr>
         </tbody>
       </table>

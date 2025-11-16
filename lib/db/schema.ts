@@ -1,4 +1,4 @@
-import { BLOCK_KINDS } from '@/components/block';
+
 import type { InferSelectModel } from 'drizzle-orm';
 import {
   sqliteTable,
@@ -6,7 +6,6 @@ import {
   integer,
   primaryKey,
 } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
 
 export const user = sqliteTable('User', {
   id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),

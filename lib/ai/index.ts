@@ -48,7 +48,7 @@ function getReasoningModel(modelId: string) {
   return configuredModel;
 }
 
-export const customModel = (apiIdentifier: string, forReasoning: boolean = false) => {
+export const customModel = (apiIdentifier: string, forReasoning = false) => {
   // Check which API key is available
   const hasOpenRouterKey = process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== "****";
 

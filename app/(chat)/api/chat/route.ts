@@ -2,9 +2,7 @@ import {
   type Message,
   convertToCoreMessages,
   createDataStreamResponse,
-  generateObject,
   generateText,
-  streamObject,
   streamText,
 } from 'ai';
 import { z } from 'zod';
@@ -14,21 +12,15 @@ import { customModel } from '@/lib/ai';
 import { models, reasoningModels } from '@/lib/ai/models';
 import { rateLimiter } from '@/lib/rate-limit';
 import {
-  codePrompt,
   systemPrompt,
-  updateDocumentPrompt,
 } from '@/lib/ai/prompts';
 import {
   deleteChatById,
   getChatById,
-  getDocumentById,
   getUser,
   saveChat,
-  saveDocument,
   saveMessages,
-  saveSuggestions,
 } from '@/lib/db/queries';
-import type { Suggestion } from '@/lib/db/schema';
 import {
   generateUUID,
   getMostRecentUserMessage,
@@ -86,7 +78,7 @@ const isBlockedDomain = (url: string): boolean => {
 
 export async function POST(request: Request) {
   const maxDuration = process.env.MAX_DURATION
-    ? parseInt(process.env.MAX_DURATION)
+    ? Number.parseInt(process.env.MAX_DURATION)
     : 300; 
   
   const {
@@ -528,7 +520,7 @@ export async function POST(request: Request) {
                     depth: researchState.currentDepth,
                   });
 
-                  let searchTopic = researchState.nextSearchTopic || topic;
+                  const searchTopic = researchState.nextSearchTopic || topic;
                   const searchResult = await app.search(searchTopic);
 
                   if (!searchResult.success) {

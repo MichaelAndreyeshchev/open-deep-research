@@ -4,8 +4,8 @@ import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { and, asc, desc, eq, gt, gte } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync } from 'fs';
-import { dirname } from 'path';
+import { existsSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 import {
   user,
@@ -20,11 +20,8 @@ import {
   uploadedDocument,
   documentChunk,
   citation,
-  type UploadedDocument,
-  type DocumentChunk,
-  type Citation,
 } from './schema';
-import { BlockKind } from '@/components/block';
+import type { BlockKind } from '@/components/block';
 
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth

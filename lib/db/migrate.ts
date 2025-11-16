@@ -2,8 +2,8 @@ import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync } from 'fs';
-import { dirname } from 'path';
+import { existsSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 config({
   path: '.env.local',

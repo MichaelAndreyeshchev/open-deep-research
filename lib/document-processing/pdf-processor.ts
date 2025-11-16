@@ -1,5 +1,5 @@
 import pdf from 'pdf-parse';
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 
 export interface DocumentChunk {
   pageNumber: number;

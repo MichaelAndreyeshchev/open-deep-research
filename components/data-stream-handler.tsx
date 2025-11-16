@@ -2,11 +2,10 @@
 
 import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
-import { BlockKind } from './block';
-import { Suggestion } from '@/lib/db/schema';
+import type { BlockKind } from './block';
+import type { Suggestion } from '@/lib/db/schema';
 import { initialBlockData, useBlock } from '@/hooks/use-block';
 import { useUserMessageId } from '@/hooks/use-user-message-id';
-import { cx } from 'class-variance-authority';
 import { useDeepResearch } from '@/lib/deep-research-context';
 
 type DataStreamDelta = {
@@ -137,7 +136,7 @@ export function DataStreamHandler({ id }: { id: string }) {
               status: 'idle',
             };
 
-          case 'activity-delta':
+          case 'activity-delta': {
             const activity = delta.content as {
               type: 'search' | 'extract' | 'analyze' | 'thought' | 'reasoning';
               status: 'pending' | 'complete' | 'error';
@@ -149,8 +148,9 @@ export function DataStreamHandler({ id }: { id: string }) {
               ...draftBlock,
               status: 'streaming',
             };
+          }
 
-          case 'source-delta':
+          case 'source-delta': {
             const source = delta.content as {
               url: string;
               title: string;
@@ -161,6 +161,7 @@ export function DataStreamHandler({ id }: { id: string }) {
               ...draftBlock,
               status: 'streaming',
             };
+          }
 
           default:
             return draftBlock;

@@ -4,15 +4,14 @@ import {
   CopyIcon,
   RedoIcon,
   UndoIcon,
-  ArrowUpIcon,
   DownloadIcon,
 } from './icons';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { useCopyToClipboard } from 'usehooks-ts';
 import { toast } from 'sonner';
-import { ConsoleOutput, UIBlock } from './block';
-import { Dispatch, memo, SetStateAction } from 'react';
+import type { ConsoleOutput, UIBlock } from './block';
+import { type Dispatch, memo, type SetStateAction } from 'react';
 import { RunCodeButton } from './run-code-button';
 import { exportToCSV } from '@/lib/spreadsheet';
 
