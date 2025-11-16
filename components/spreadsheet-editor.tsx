@@ -437,7 +437,7 @@ const PureSpreadsheetEditor = ({
                       e.stopPropagation();
                       handleHeaderChange(i, e.target.value);
                     }}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                       e.stopPropagation();
                       setSelectedCell(null);
                       setEditingCell(null);
@@ -471,7 +471,7 @@ const PureSpreadsheetEditor = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
                         className="opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 h-6 w-6"
                       >
                         <ChevronDownIcon size={16} />
@@ -531,7 +531,7 @@ const PureSpreadsheetEditor = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
                         className="opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 h-6 w-6"
                       >
                         <ChevronDownIcon size={16} />
