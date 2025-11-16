@@ -437,7 +437,7 @@ const PureSpreadsheetEditor = ({
                       e.stopPropagation();
                       handleHeaderChange(i, e.target.value);
                     }}
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
                       e.stopPropagation();
                       setSelectedCell(null);
                       setEditingCell(null);
