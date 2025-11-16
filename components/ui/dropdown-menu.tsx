@@ -6,7 +6,9 @@ import { cn } from '@/lib/utils';
 
 const DropdownMenu = ({ children, ...props }: any) => <Menu {...props}>{children}</Menu>;
 
-const DropdownMenuTrigger = Menu.Target;
+const DropdownMenuTrigger = ({ children, asChild, className }: { children: React.ReactNode; asChild?: boolean; className?: string }) => (
+  <Menu.Target>{children}</Menu.Target>
+);
 
 const DropdownMenuGroup = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
