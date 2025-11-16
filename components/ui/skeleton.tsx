@@ -1,12 +1,13 @@
+import { Skeleton as MantineSkeleton, type SkeletonProps } from '@mantine/core';
 import { cn } from '@/lib/utils';
 
 function Skeleton({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: SkeletonProps & { className?: string }) {
   return (
-    <div
-      className={cn('animate-pulse rounded-md bg-muted', className)}
+    <MantineSkeleton
+      className={cn(className)}
       {...props}
     />
   );
