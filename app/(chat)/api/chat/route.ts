@@ -53,7 +53,36 @@ const app = new FirecrawlApp({
   apiKey: process.env.FIRECRAWL_API_KEY || '',
 });
 
-// const reasoningModel = customModel(process.env.REASONING_MODEL || 'o1-mini', true);
+const BLOCKLIST_DOMAINS = [
+  'fortunebusinessinsights.com',
+  'grandviewresearch.com',
+  'polarismarketresearch.com',
+  'psmarketresearch.com',
+  'insightaceanalytic.com',
+  'globenewswire.com',
+  'introspectivemarketresearch.com',
+  'straitsresearch.com',
+  'credenceresearch.com',
+  'theinsightpartners.com',
+  'marketsandmarkets.com',
+  'transparencymarketresearch.com',
+  'focusreports.store',
+  'myconsultingcoach.com',
+  'github.com',
+  'precedenceresearch.com',
+  'futuremarketinsights.com',
+  'expertmarketresearch.com',
+  'marketdataforecast.com',
+];
+
+const isBlockedDomain = (url: string): boolean => {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    return BLOCKLIST_DOMAINS.some(domain => hostname.includes(domain));
+  } catch {
+    return false;
+  }
+};
 
 export async function POST(request: Request) {
   const maxDuration = process.env.MAX_DURATION
@@ -211,20 +240,20 @@ export async function POST(request: Request) {
                   };
                 }
 
-                // Add favicon URLs to search results
-                const resultsWithFavicons = searchResult.data.map((result: any) => {
-                  const url = new URL(result.url);
-                  const favicon = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`;
-                  return {
-                    ...result,
-                    favicon
-                  };
-                });
-
-                searchResult.data = resultsWithFavicons;
+                // Filter out blocked domains and add favicon URLs to search results
+                const filteredResults = searchResult.data
+                  .filter((result: any) => !isBlockedDomain(result.url))
+                  .map((result: any) => {
+                    const url = new URL(result.url);
+                    const favicon = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`;
+                    return {
+                      ...result,
+                      favicon
+                    };
+                  });
 
                 return {
-                  data: searchResult.data,
+                  data: filteredResults,
                   success: true,
                 };
               } catch (error: any) {
