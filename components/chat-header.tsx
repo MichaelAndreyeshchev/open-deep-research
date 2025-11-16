@@ -126,6 +126,62 @@ function PureChatHeader({
         </Link>
       </Button>
 
+      {/* Export and Verification Buttons */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="outline"
+            className="hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4"
+            onClick={async () => {
+              try {
+                const response = await fetch(`/api/export/markdown?chatId=${chatId}`);
+                if (!response.ok) throw new Error('Export failed');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `research-report-${chatId}.md`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+              } catch (error) {
+                console.error('Export error:', error);
+              }
+            }}
+          >
+            📄 Export
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Export to Markdown</TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="outline"
+            className="hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4"
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/citations/verify', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ chatId }),
+                });
+                if (!response.ok) throw new Error('Verification failed');
+                const result = await response.json();
+                console.log('Citation verification result:', result);
+              } catch (error) {
+                console.error('Verification error:', error);
+              }
+            }}
+          >
+            ✓ Verify
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Verify Citations</TooltipContent>
+      </Tooltip>
+
       <Button
         variant="outline"
         className="hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4 "
