@@ -1,4 +1,3 @@
-import * as pdf from 'pdf-parse';
 import { readFile } from 'node:fs/promises';
 
 export interface DocumentChunk {
@@ -24,6 +23,7 @@ export interface ProcessedDocument {
 
 export async function processPDF(filePath: string): Promise<ProcessedDocument> {
   const dataBuffer = await readFile(filePath);
+  const pdf = (await import('pdf-parse')).default;
   const data = await pdf(dataBuffer);
 
   const chunks: DocumentChunk[] = [];
@@ -59,6 +59,7 @@ export async function processPDF(filePath: string): Promise<ProcessedDocument> {
 }
 
 export async function processPDFBuffer(buffer: Buffer): Promise<ProcessedDocument> {
+  const pdf = (await import('pdf-parse')).default;
   const data = await pdf(buffer);
 
   const chunks: DocumentChunk[] = [];
