@@ -24,8 +24,15 @@ export interface ProcessedDocument {
 
 export async function processPDF(filePath: string): Promise<ProcessedDocument> {
   const dataBuffer = await readFile(filePath);
-  const pdf = new PDFParse();
-  const data = await pdf.parse(dataBuffer);
+  const pdf = new PDFParse({ data: dataBuffer });
+  const textResult = await pdf.getText();
+  const infoResult = await pdf.getInfo();
+  
+  const data = {
+    text: textResult.text,
+    numpages: textResult.pages.length,
+    info: infoResult.info
+  };
 
   const chunks: DocumentChunk[] = [];
   const pageTexts = data.text.split('\f');
@@ -60,8 +67,15 @@ export async function processPDF(filePath: string): Promise<ProcessedDocument> {
 }
 
 export async function processPDFBuffer(buffer: Buffer): Promise<ProcessedDocument> {
-  const pdf = new PDFParse();
-  const data = await pdf.parse(buffer);
+  const pdf = new PDFParse({ data: buffer });
+  const textResult = await pdf.getText();
+  const infoResult = await pdf.getInfo();
+  
+  const data = {
+    text: textResult.text,
+    numpages: textResult.pages.length,
+    info: infoResult.info
+  };
 
   const chunks: DocumentChunk[] = [];
   const pageTexts = data.text.split('\f');
