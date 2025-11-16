@@ -339,6 +339,56 @@ export async function POST(request: Request) {
               topic: z.string().describe('The topic or question to research'),
             }),
             execute: async ({ topic, maxDepth = 7 }) => {
+              if (experimental_deepResearch) {
+                try {
+                  // Stream OpenAI Deep Research results
+                  const stream = streamDeepResearch({
+                    query: topic,
+                    systemPrompt: peCddSystemPrompt,
+                    model: 'o4-mini-deep-research-2025-06-26',
+                  });
+
+                  let finalText = '';
+                  const citations: any[] = [];
+
+                  for await (const event of stream) {
+                    if (event.type === 'content.delta' && event.delta) {
+                      finalText += event.delta;
+                      dataStream.writeData({
+                        type: 'text-delta',
+                        content: event.delta,
+                      });
+                    } else if (event.type === 'response.done' && event.response) {
+                      // Extract citations from final response
+                      const messageOutputs = event.response.output?.filter((item: any) => item.type === 'message') || [];
+                      const finalOutput = messageOutputs[messageOutputs.length - 1];
+                      if (finalOutput?.content?.[0]?.annotations) {
+                        citations.push(...finalOutput.content[0].annotations);
+                      }
+                    }
+                  }
+
+                  dataStream.writeData({
+                    type: 'finish',
+                    content: finalText,
+                  });
+
+                  return {
+                    success: true,
+                    data: {
+                      analysis: finalText,
+                      citations,
+                    },
+                  };
+                } catch (error: any) {
+                  console.error('OpenAI Deep Research error:', error);
+                  return {
+                    success: false,
+                    error: error.message,
+                  };
+                }
+              }
+
               const startTime = Date.now();
               const timeLimit = 4.5 * 60 * 1000; // 4 minutes 30 seconds in milliseconds
 
