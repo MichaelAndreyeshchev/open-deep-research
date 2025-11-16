@@ -26,7 +26,9 @@ const DropdownMenuSubContent = ({ children, className }: { children?: React.Reac
   <div className={cn(className)}>{children}</div>
 );
 
-const DropdownMenuContent = Menu.Dropdown;
+const DropdownMenuContent = ({ children, align, className, ...props }: { children?: React.ReactNode; align?: string; className?: string; [key: string]: any }) => (
+  <Menu.Dropdown className={cn(className)} {...props}>{children}</Menu.Dropdown>
+);
 
 const DropdownMenuItem = Menu.Item;
 
