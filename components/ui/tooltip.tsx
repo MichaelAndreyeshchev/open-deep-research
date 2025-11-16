@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 
 const TooltipProvider = ({ children, delayDuration }: { children: React.ReactNode; delayDuration?: number }) => <>{children}</>;
 
-const Tooltip = ({ children }: { children: React.ReactNode }) => {
+const Tooltip = ({ children, open }: { children: React.ReactNode; open?: boolean }) => {
   let label: React.ReactNode = null;
   let trigger: React.ReactNode = null;
 
@@ -25,7 +25,7 @@ const Tooltip = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <MantineTooltip label={label}>
+    <MantineTooltip label={label} opened={open}>
       {trigger}
     </MantineTooltip>
   );
