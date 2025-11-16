@@ -342,3 +342,128 @@ export async function updateChatVisiblityById({
     throw error;
   }
 }
+
+export async function saveUploadedDocument({
+  id,
+  filename,
+  userId,
+  totalPages,
+  fileSize,
+  metadata,
+}: {
+  id: string;
+  filename: string;
+  userId: string;
+  totalPages: number;
+  fileSize: number;
+  metadata?: Record<string, any>;
+}) {
+  try {
+    return await db.insert(uploadedDocument).values({
+      id,
+      filename,
+      userId,
+      uploadedAt: new Date(),
+      totalPages,
+      fileSize,
+      metadata,
+    });
+  } catch (error) {
+    console.error('Failed to save uploaded document in database');
+    throw error;
+  }
+}
+
+export async function saveDocumentChunks(
+  chunks: Array<{
+    id: string;
+    documentId: string;
+    chunkIndex: number;
+    pageNumber: number;
+    content: string;
+    metadata?: Record<string, any>;
+  }>
+) {
+  try {
+    return await db.insert(documentChunk).values(chunks);
+  } catch (error) {
+    console.error('Failed to save document chunks in database');
+    throw error;
+  }
+}
+
+export async function getUploadedDocumentsByUserId(userId: string) {
+  try {
+    return await db
+      .select()
+      .from(uploadedDocument)
+      .where(eq(uploadedDocument.userId, userId))
+      .orderBy(desc(uploadedDocument.uploadedAt));
+  } catch (error) {
+    console.error('Failed to get uploaded documents by user id from database');
+    throw error;
+  }
+}
+
+export async function getDocumentChunksByDocumentId(documentId: string) {
+  try {
+    return await db
+      .select()
+      .from(documentChunk)
+      .where(eq(documentChunk.documentId, documentId))
+      .orderBy(asc(documentChunk.chunkIndex));
+  } catch (error) {
+    console.error('Failed to get document chunks by document id from database');
+    throw error;
+  }
+}
+
+export async function saveCitation({
+  id,
+  messageId,
+  sourceType,
+  sourceId,
+  sourceName,
+  pageNumber,
+  excerpt,
+  url,
+}: {
+  id: string;
+  messageId: string;
+  sourceType: 'document' | 'web';
+  sourceId?: string;
+  sourceName: string;
+  pageNumber?: number;
+  excerpt?: string;
+  url?: string;
+}) {
+  try {
+    return await db.insert(citation).values({
+      id,
+      messageId,
+      sourceType,
+      sourceId,
+      sourceName,
+      pageNumber,
+      excerpt,
+      url,
+      createdAt: new Date(),
+    });
+  } catch (error) {
+    console.error('Failed to save citation in database');
+    throw error;
+  }
+}
+
+export async function getCitationsByMessageId(messageId: string) {
+  try {
+    return await db
+      .select()
+      .from(citation)
+      .where(eq(citation.messageId, messageId))
+      .orderBy(asc(citation.createdAt));
+  } catch (error) {
+    console.error('Failed to get citations by message id from database');
+    throw error;
+  }
+}
