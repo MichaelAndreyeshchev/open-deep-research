@@ -264,18 +264,26 @@ The application uses SQLite with the following key tables:
 6. **Processing Time**: Large documents may take time to process
 7. **No Authentication UI**: Uses anonymous sessions by default
 
+## Implemented Bonus Features
+
+1. **OpenAI Deep Research Integration**: Core integration library created for OpenAI's web_search_preview tool
+2. **Export to Markdown**: API endpoint (`/api/export/markdown`) for exporting research reports to Markdown format with citations
+3. **Citation Verification**: API endpoint (`/api/citations/verify`) for validating citation links and checking against blocklist
+4. **PRISMA-style Audit Trail**: Database tables (ResearchRun, ResearchStep, CitationVerification) for tracking research methodology
+5. **Opposing Views & Uncertainty**: Enhanced system prompt to require uncertainty sections with confidence levels in reports
+
 ## Future Improvements
 
-1. **Multi-format Support**: Add support for DOCX, TXT, and other formats
-2. **Advanced Visualization**: Charts and graphs for research findings
-3. **Citation Verification**: Automated verification of citations and links
-4. **Collaborative Features**: Commenting and sharing capabilities
-5. **Mobile Support**: Responsive design for mobile devices
-6. **Advanced Analytics**: Quality evaluation and benchmarks
-7. **Paywalled Content**: Integration with academic databases
-8. **Multimodal Reading**: Better extraction from tables, figures, and math
-9. **PRISMA/RAISE Protocols**: Methodology and reproducibility tracking
-10. **Uncertainty Handling**: Display opposing views with confidence levels
+1. **Complete OpenAI Integration**: Fully integrate OpenAI Deep Research into chat route as primary research provider
+2. **Export UI Components**: Add export buttons and citation verification UI to the interface
+3. **PDF Export**: Implement print-friendly page for PDF generation via window.print()
+4. **Advanced Visualization**: Charts and graphs for research findings using Mantine Charts or Recharts
+5. **Multi-format Support**: Add support for DOCX, TXT, and other document formats
+6. **Collaborative Features**: Commenting and sharing capabilities
+7. **Mobile Support**: Responsive design for mobile devices
+8. **Advanced Analytics**: Quality evaluation and benchmarks
+9. **Paywalled Content**: Integration with academic databases (Scopus, etc.)
+10. **Multimodal Reading**: Better extraction from tables, figures, and math in PDFs
 
 ## API Keys Configuration
 
