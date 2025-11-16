@@ -279,7 +279,7 @@ function PureMultimodalInput({
 
       <div className="absolute bottom-0 p-2 flex flex-row gap-2 justify-start items-center">
         <AttachmentsButton fileInputRef={fileInputRef} isLoading={isLoading} />
-        <Tabs value={searchMode} onValueChange={(value) => {
+        <Tabs value={searchMode} onValueChange={(value: string) => {
           setSearchMode(value as SearchMode);
         }}>
           <TabsList className="bg-transparent border rounded-full p-1 h-fit">
