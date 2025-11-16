@@ -139,7 +139,7 @@ export const citation = sqliteTable('Citation', {
     .notNull()
     .references(() => message.id),
   sourceType: text('sourceType', { enum: ['document', 'web'] }).notNull(),
-  sourceId: text('sourceId'), // documentId or URL
+  sourceId: text('sourceId'),
   sourceName: text('sourceName').notNull(),
   pageNumber: integer('pageNumber'),
   excerpt: text('excerpt'),
@@ -148,3 +148,47 @@ export const citation = sqliteTable('Citation', {
 });
 
 export type Citation = InferSelectModel<typeof citation>;
+
+export const researchRun = sqliteTable('ResearchRun', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  chatId: text('chatId')
+    .notNull()
+    .references(() => chat.id),
+  model: text('model').notNull(),
+  provider: text('provider', { enum: ['openai', 'firecrawl'] }).notNull(),
+  startedAt: integer('startedAt', { mode: 'timestamp' }).notNull(),
+  completedAt: integer('completedAt', { mode: 'timestamp' }),
+  settings: text('settings', { mode: 'json' }),
+  status: text('status', { enum: ['running', 'completed', 'failed'] }).notNull(),
+});
+
+export type ResearchRun = InferSelectModel<typeof researchRun>;
+
+export const researchStep = sqliteTable('ResearchStep', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  runId: text('runId')
+    .notNull()
+    .references(() => researchRun.id),
+  stepType: text('stepType', { 
+    enum: ['reasoning', 'web_search_call', 'code_interpreter', 'output_text', 'search', 'extract', 'analyze', 'synthesis'] 
+  }).notNull(),
+  payload: text('payload', { mode: 'json' }).notNull(),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
+  status: text('status', { enum: ['pending', 'complete', 'error'] }).notNull(),
+});
+
+export type ResearchStep = InferSelectModel<typeof researchStep>;
+
+export const citationVerification = sqliteTable('CitationVerification', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  citationId: text('citationId')
+    .notNull()
+    .references(() => citation.id),
+  verifiedAt: integer('verifiedAt', { mode: 'timestamp' }).notNull(),
+  status: text('status', { enum: ['ok', 'broken', 'blocked', 'redirected'] }).notNull(),
+  httpStatus: integer('httpStatus'),
+  redirectUrl: text('redirectUrl'),
+  errorMessage: text('errorMessage'),
+});
+
+export type CitationVerification = InferSelectModel<typeof citationVerification>;
