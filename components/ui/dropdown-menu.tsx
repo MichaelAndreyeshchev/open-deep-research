@@ -30,7 +30,9 @@ const DropdownMenuContent = ({ children, align, className, ...props }: { childre
   <Menu.Dropdown className={cn(className)} {...props}>{children}</Menu.Dropdown>
 );
 
-const DropdownMenuItem = Menu.Item;
+const DropdownMenuItem = ({ children, asChild, className, ...props }: { children?: React.ReactNode; asChild?: boolean; className?: string; [key: string]: any }) => (
+  <Menu.Item className={cn(className)} {...props}>{children}</Menu.Item>
+);
 
 const DropdownMenuCheckboxItem = ({ children, className, checked }: { children?: React.ReactNode; className?: string; checked?: boolean }) => (
   <Menu.Item className={cn(className)}>{children}</Menu.Item>
