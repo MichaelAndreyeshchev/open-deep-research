@@ -34,7 +34,7 @@ const Tooltip = ({ children, open }: { children: React.ReactNode; open?: boolean
 const TooltipTrigger = ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) => <>{children}</>;
 TooltipTrigger.displayName = 'TooltipTrigger';
 
-const TooltipContent = ({ className, children, ...props }: { className?: string; children: React.ReactNode; align?: string }) => (
+const TooltipContent = ({ className, children, side, sideOffset, align, ...props }: { className?: string; children: React.ReactNode; align?: string; side?: string; sideOffset?: number; [key: string]: any }) => (
   <>{children}</>
 );
 TooltipContent.displayName = 'TooltipContent';
