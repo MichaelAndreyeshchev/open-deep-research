@@ -1,4 +1,4 @@
-import pdf from 'pdf-parse';
+import * as pdf from 'pdf-parse';
 import { readFile } from 'node:fs/promises';
 
 export interface DocumentChunk {
