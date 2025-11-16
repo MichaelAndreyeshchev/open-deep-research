@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Tooltip as MantineTooltip } from '@mantine/core';
 import { cn } from '@/lib/utils';
 
-const TooltipProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const TooltipProvider = ({ children, delayDuration }: { children: React.ReactNode; delayDuration?: number }) => <>{children}</>;
 
 const Tooltip = ({ children }: { children: React.ReactNode }) => {
   let label: React.ReactNode = null;
