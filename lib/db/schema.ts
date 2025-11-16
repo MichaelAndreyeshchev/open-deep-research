@@ -1,61 +1,57 @@
 import { BLOCK_KINDS } from '@/components/block';
 import type { InferSelectModel } from 'drizzle-orm';
 import {
-  pgTable,
-  varchar,
-  timestamp,
-  json,
-  uuid,
+  sqliteTable,
   text,
+  integer,
   primaryKey,
-  foreignKey,
-  boolean,
-} from 'drizzle-orm/pg-core';
+} from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
 
-export const user = pgTable('User', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  email: varchar('email', { length: 64 }).notNull(),
-  password: varchar('password', { length: 64 }),
+export const user = sqliteTable('User', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  email: text('email', { length: 64 }).notNull(),
+  password: text('password', { length: 64 }),
 });
 
 export type User = InferSelectModel<typeof user>;
 
-export const chat = pgTable('Chat', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  createdAt: timestamp('createdAt').notNull(),
+export const chat = sqliteTable('Chat', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
   title: text('title').notNull(),
-  userId: uuid('userId')
+  userId: text('userId')
     .notNull()
     .references(() => user.id),
-  visibility: varchar('visibility', { enum: ['public', 'private'] })
+  visibility: text('visibility', { enum: ['public', 'private'] })
     .notNull()
     .default('private'),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
 
-export const message = pgTable('Message', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  chatId: uuid('chatId')
+export const message = sqliteTable('Message', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  chatId: text('chatId')
     .notNull()
     .references(() => chat.id),
-  role: varchar('role').notNull(),
-  content: json('content').notNull(),
-  createdAt: timestamp('createdAt').notNull(),
+  role: text('role').notNull(),
+  content: text('content', { mode: 'json' }).notNull(),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
 });
 
 export type Message = InferSelectModel<typeof message>;
 
-export const vote = pgTable(
+export const vote = sqliteTable(
   'Vote',
   {
-    chatId: uuid('chatId')
+    chatId: text('chatId')
       .notNull()
       .references(() => chat.id),
-    messageId: uuid('messageId')
+    messageId: text('messageId')
       .notNull()
       .references(() => message.id),
-    isUpvoted: boolean('isUpvoted').notNull(),
+    isUpvoted: integer('isUpvoted', { mode: 'boolean' }).notNull(),
   },
   (table) => {
     return {
@@ -66,17 +62,17 @@ export const vote = pgTable(
 
 export type Vote = InferSelectModel<typeof vote>;
 
-export const document = pgTable(
+export const document = sqliteTable(
   'Document',
   {
-    id: uuid('id').notNull().defaultRandom(),
-    createdAt: timestamp('createdAt').notNull(),
+    id: text('id').notNull().$defaultFn(() => crypto.randomUUID()),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
     title: text('title').notNull(),
     content: text('content'),
-    kind: varchar('kind', { enum: ['text', 'code', 'spreadsheet'] })
+    kind: text('kind', { enum: ['text', 'code', 'spreadsheet'] })
       .notNull()
       .default('text'),
-    userId: uuid('userId')
+    userId: text('userId')
       .notNull()
       .references(() => user.id),
   },
@@ -89,28 +85,67 @@ export const document = pgTable(
 
 export type Document = InferSelectModel<typeof document>;
 
-export const suggestion = pgTable(
+export const suggestion = sqliteTable(
   'Suggestion',
   {
-    id: uuid('id').notNull().defaultRandom(),
-    documentId: uuid('documentId').notNull(),
-    documentCreatedAt: timestamp('documentCreatedAt').notNull(),
+    id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+    documentId: text('documentId').notNull(),
+    documentCreatedAt: integer('documentCreatedAt', { mode: 'timestamp' }).notNull(),
     originalText: text('originalText').notNull(),
     suggestedText: text('suggestedText').notNull(),
     description: text('description'),
-    isResolved: boolean('isResolved').notNull().default(false),
-    userId: uuid('userId')
+    isResolved: integer('isResolved', { mode: 'boolean' }).notNull().default(false),
+    userId: text('userId')
       .notNull()
       .references(() => user.id),
-    createdAt: timestamp('createdAt').notNull(),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.id] }),
-    documentRef: foreignKey({
-      columns: [table.documentId, table.documentCreatedAt],
-      foreignColumns: [document.id, document.createdAt],
-    }),
   }),
 );
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
+
+export const uploadedDocument = sqliteTable('UploadedDocument', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  filename: text('filename').notNull(),
+  userId: text('userId')
+    .notNull()
+    .references(() => user.id),
+  uploadedAt: integer('uploadedAt', { mode: 'timestamp' }).notNull(),
+  totalPages: integer('totalPages').notNull(),
+  fileSize: integer('fileSize').notNull(),
+  metadata: text('metadata', { mode: 'json' }),
+});
+
+export type UploadedDocument = InferSelectModel<typeof uploadedDocument>;
+
+export const documentChunk = sqliteTable('DocumentChunk', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  documentId: text('documentId')
+    .notNull()
+    .references(() => uploadedDocument.id),
+  chunkIndex: integer('chunkIndex').notNull(),
+  pageNumber: integer('pageNumber').notNull(),
+  content: text('content').notNull(),
+  metadata: text('metadata', { mode: 'json' }),
+});
+
+export type DocumentChunk = InferSelectModel<typeof documentChunk>;
+
+export const citation = sqliteTable('Citation', {
+  id: text('id').primaryKey().notNull().$defaultFn(() => crypto.randomUUID()),
+  messageId: text('messageId')
+    .notNull()
+    .references(() => message.id),
+  sourceType: text('sourceType', { enum: ['document', 'web'] }).notNull(),
+  sourceId: text('sourceId'), // documentId or URL
+  sourceName: text('sourceName').notNull(),
+  pageNumber: integer('pageNumber'),
+  excerpt: text('excerpt'),
+  url: text('url'),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
+});
+
+export type Citation = InferSelectModel<typeof citation>;
