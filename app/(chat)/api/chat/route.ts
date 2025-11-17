@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     messages,
     modelId,
     reasoningModelId,
-    experimental_deepResearch = false,
+    experimental_deepResearch = true,
   }: { 
     id: string; 
     messages: Array<Message>; 
