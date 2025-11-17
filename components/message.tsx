@@ -252,13 +252,13 @@ const PurePreviewMessage = ({
                       <div key={toolCallId}>
                         {toolName === 'search' ? (
                           <SearchResults
-                            results={result.data.map((item: any) => ({
+                            results={result.data?.map((item: any) => ({
                               title: item.title,
                               url: item.url,
                               description: item.description,
                               source: new URL(item.url).hostname,
                               favicon: item.favicon,
-                            }))}
+                            })) || []}
                           />
                         ) : toolName === 'extract' ? (
                           <ExtractResults
